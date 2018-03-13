@@ -1,0 +1,53 @@
+<style>
+    [class*="col-"] {
+        float: left;
+        padding: 15px;
+        border: 1px solid red;
+    }
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+</style>
+<& /Elements/Header,
+    Title => $title,
+&>
+<& /Elements/Tabs &>
+
+<div class="row">
+    <h1>Available Posts</h1>
+% if ( $Save ) {
+    <h2>List Updated</h2>
+% }
+    <div class="col-3">
+% while ( my $ticket = $tickets->Next ) {
+    <form name='ticketId' action="/Blog/Details.html">
+        <p><% $ticket->Subject ? $ticket->Subject : 'Ticket: ' . $ticket->Id %></p>
+        <button name='ticketId' value="<% $ticket->Id %>">Details</button>
+    </form>
+% }
+    </div>
+</div>
+
+<%init>
+my $title = 'Markdown Tickets';
+my $queue = RT::Queue->new($session{'CurrentUser'});
+my ($ret, $msg) = $queue->Load(RT->Config->Get('TicketMarkdownQueue'));
+return ($ret, $msg) unless $ret;
+
+my $tickets = RT::Tickets->new($session{'CurrentUser'});
+($ret, $msg) = $tickets->LimitQueue( VALUE => $queue->Name );
+return ($ret, $msg) unless $ret;
+</%init>
+
+<%args>
+$Save => undef
+</%args>

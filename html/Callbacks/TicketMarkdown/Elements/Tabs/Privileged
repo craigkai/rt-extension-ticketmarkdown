@@ -1,0 +1,13 @@
+<%init>
+my $args = $DECODED_ARGS;
+my $id = $args->{id};
+
+if (my $actions = PageMenu->child('actions')) {
+    my $path = RT->Config->Get('WebPath') . "/Blog/Details.html?ticketId=$id";
+    $actions->child('Ticket Markdown' =>
+        title => loc('Create Blog Post'), 
+        path => $path,
+    );
+}
+
+</%init>

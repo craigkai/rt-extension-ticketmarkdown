@@ -1,0 +1,16 @@
+<& /Elements/Header,
+    Title => $title,
+    onload => "function () { hide('Ticket-Create-details') }" &>
+<& /Elements/Tabs &>
+% $m->out($html);
+<form action='/Blog'>
+    <button name='Save' value='1' type='Submit'>Save To Blog</button>
+</form>
+<%init>
+my $title = 'Details';  
+my $html = RT::Extension::TicketMarkdown::TicketToMarkdown($ticketId);
+</%init>
+
+<%args>
+$ticketId
+</%args>
